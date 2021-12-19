@@ -2,6 +2,8 @@ package com.game;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -90,64 +92,15 @@ class WarriorTest {
 
         assertFalse(result, "unit_2 should have won");
     }
-    @Test
-    @DisplayName("Battle 1")
-    void Test8(){
-        var army_1 = new Army();
-        var army_2 = new Army();
-        army_1.addUnits("Warrior",1);
-        army_2.addUnits("Warrior",2);
-        var result =  Battle.army_fight(army_1,army_2);
-        assertFalse(result,"Army_2 should have won");
-    }
-    @Test
-    @DisplayName("Battle 2")
-    void Test9(){
-        var army_1 = new Army();
-        var army_2 = new Army();
-        army_1.addUnits("Warrior",2);
-        army_2.addUnits("Warrior",3);
-        var result =  Battle.army_fight(army_1,army_2);
-        assertFalse(result,"Army_2 should have won");
-    }
-    @Test
-    @DisplayName("Battle 3")
-    void Test10(){
-        var army_1 = new Army();
-        var army_2 = new Army();
-        army_1.addUnits("Warrior",5);
-        army_2.addUnits("Warrior",7);
-        var result =  Battle.army_fight(army_1,army_2);
-        assertFalse(result,"Army_2 should have won");
-    }
-    @Test
-    @DisplayName("Battle 4")
-    void Test11(){
-        var army_1 = new Army();
-        var army_2 = new Army();
-        army_1.addUnits("Warrior",20);
-        army_2.addUnits("Warrior",21);
-        var result =  Battle.army_fight(army_1,army_2);
-        assertTrue(result,"Army_1 should have won");
-    }
-    @Test
-    @DisplayName("Battle 5")
-    void Test12(){
-        var army_1 = new Army();
-        var army_2 = new Army();
-        army_1.addUnits("Warrior",10);
-        army_2.addUnits("Warrior",11);
-        var result =  Battle.army_fight(army_1,army_2);
-        assertTrue(result,"Army_1 should have won");
-    }
-    @Test
-    @DisplayName("Battle 6")
-    void Test13(){
-        var army_1 = new Army();
-        var army_2 = new Army();
-        army_1.addUnits("Warrior",11);
-        army_2.addUnits("Warrior",7);
-        var result =  Battle.army_fight(army_1,army_2);
-        assertTrue(result,"Army_1 should have won");
+    @ParameterizedTest(name = "[{index}] {0} vs {1} Result => {2}")
+    @CsvSource({"Defender,Warrior,true",
+            "Defender,Rookie,true",})
+    void fightWarriors(String firstWarriorType,
+                       String SecondWarriorType,
+                       boolean expected){
+        var first = Defender.of(firstWarriorType);
+        var second = Warrior.of(SecondWarriorType);
+        var result = Battle.fight(first,second);
+        assertEquals(expected,result);
     }
 }
